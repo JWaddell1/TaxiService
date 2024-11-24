@@ -3,6 +3,11 @@
 package com.mycompany.taxiservice;
 
 //Public Customer Class responsible for handling customer related tasks
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Scanner;
 public class Customer {
     //Private Customer Attributes
     private int customer_id = 0;
@@ -85,9 +90,44 @@ public class Customer {
     
     //Public Method to Register Customer
     public void register_customer() {
-        // Registration logic (e.g., save customer details to the database)
-    }
-    
+        Scanner newuser = new Scanner(System.in);
+        //Scanner object created to accept input from users
+        System.out.println("What is your first name");
+        String temp_first_name = newuser.nextLine();
+        System.out.println("What is your last name");
+        String temp_last_name = newuser.nextLine();
+        System.out.println("Enter your phone number");
+        String temp_phone_number = newuser.nextLine();
+        System.out.println("Enter your email address");
+        String temp_email_address = newuser.nextLine();
+        System.out.println("What are you paying with?");
+        String temp_payment_method = newuser.nextLine();
+        //Users enter thie rinfo and its saved to the variables.
+        String url = "jdbc:mysql://localhost:3306/TaxiServicedb";
+        //url used to connect to the database
+        String username = "root";
+        String password = "mummycome12!";
+        //User info used to access the database.
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection(url,username,password);
+            String SQL = ("INSERT INTO Customers(first_name,last_name,phone_number,email_address,payment_method) VALUES(?,?,?,?,?)");
+            //Query to insert data into the table
+            try (PreparedStatement preparestatement = connection.prepareStatement(SQL)) {
+                System.out.println("Connection found my boy");
+                preparestatement.setString(1,temp_first_name);
+                preparestatement.setString(2,temp_last_name);
+                preparestatement.setString(3,temp_phone_number);
+                preparestatement.setString(4,temp_email_address);
+                preparestatement.setString(5,temp_payment_method);
+                //each variable has its own preparestatment object
+                preparestatement.executeUpdate();
+                //query executed
+            }
+        } catch(Exception e) {
+            System.out.println(e);
+          }
+    } 
     
     //Probably would change
     //Public Method to Validate Customer 

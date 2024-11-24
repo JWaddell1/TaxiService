@@ -52,6 +52,8 @@ public class TaxiService {
 
   
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Customer customer1 = new Customer(1,"","","","","");
+        customer1.register_customer();
+
     }
 }
