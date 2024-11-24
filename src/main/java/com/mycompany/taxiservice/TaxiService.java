@@ -51,9 +51,13 @@ public class TaxiService {
         }
 
   
-    public static void main(String[] args) {
-        Customer customer1 = new Customer(1,"","","","","");
-        customer1.register_customer();
-
+   public static void main(String[] args){
+               // Create an instance of HomePage
+        HomePage homePage = new HomePage();
+        
+        // Make the JFrame visible
+        homePage.setVisible(true);
     }
 }
+   
+
