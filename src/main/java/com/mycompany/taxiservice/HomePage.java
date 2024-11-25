@@ -4,10 +4,9 @@
  */
 package com.mycompany.taxiservice;
 
-/**
- *
- * @author jamwe
- */
+import javax.swing.JOptionPane;
+
+
 public class HomePage extends javax.swing.JFrame {
 
     /**
@@ -100,6 +99,9 @@ public class HomePage extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    
+     //This method is triggered when jButton1 (Login button) is clicked
+    //It opens the Login page and disposes the current window (closes it)
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         Login LoginPage = new Login();
@@ -107,10 +109,23 @@ public class HomePage extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+     //This method is triggered when jButton2 (Create New User button) is clicked
+    //It prompts the user to select their user type (Customer or Driver)
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        CreateNewUser NewUser = new CreateNewUser();
-        NewUser.setVisible(true);
+        String[] options = {"Customer", "Driver"};
+        int choice = JOptionPane.showOptionDialog(this, "Please select your user type", "User Type",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+        if (choice == 0) { // Customer
+            CreateNewUser newUser = new CreateNewUser("Customer");
+            newUser.setVisible(true);
+        } else if (choice != 1) {        } else {
+            // Driver
+            CreateNewUser newUser = new CreateNewUser("Driver");
+            newUser.setVisible(true);
+        }
+
         dispose();
         
     }//GEN-LAST:event_jButton2ActionPerformed

@@ -11,28 +11,77 @@ package com.mycompany.taxiservice;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import javax.swing.JButton;
+import java.sql.SQLException;
+import javax.swing.GroupLayout;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.LayoutStyle;
 public class CreateNewUser extends javax.swing.JFrame {
 
+    
     /**
      * Creates new form CreateNewUser
      */
-    public CreateNewUser() {
-        initComponents(); // Initialize the form components
-        setTitle("Create New User");
+     private final String userType;
+
+     public CreateNewUser(String userType) {
+        this.userType = userType;
+        initComponents();
+        setTitle("Create New User - " + userType);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        
-        registerbutton.addActionListener(evt -> register_customer());
-
+        configureFormBasedOnUserType();
+        registerbutton.addActionListener(evt -> registerUser());
     }
+     
+//Method to configure the form based on user type (Driver or Customer)
+//This method adjusts the layout, hides customer-specific fields, 
+//and places the password field below the email address for Driver users.
+  private void configureFormBasedOnUserType() {
+    if ("Driver".equals(userType)) {
+        // Hide customer-specific fields
+        tppayment_method.setVisible(false);
+        jLabel5.setVisible(false);  // Hide payment method label
+
+        // Place Password below Email Address
+        jLabel6.setVisible(true);  // Show Password label
+        tppassword.setVisible(true);  // Show Password field
+
+        // Adjust layout to put Password under Email
+        GroupLayout layout = (GroupLayout) getContentPane().getLayout();
+        GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
+        vGroup.addGap(31);  // Space between fields
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel1).addComponent(tpfirst_name, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE));
+        vGroup.addGap(31);  // Space between fields
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel2).addComponent(tplast_name, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE));
+        vGroup.addGap(31);
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel3).addComponent(tpphone_number, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE));
+        vGroup.addGap(31);
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel4).addComponent(tpemail_address, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE));
+        vGroup.addGap(20);  // Space between email and password
+        vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel6).addComponent(tppassword, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE));  // Password under email
+        vGroup.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+        vGroup.addComponent(registerbutton, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE);
+        layout.setVerticalGroup(vGroup);
+
+        // Refresh layout
+        getContentPane().revalidate();
+        getContentPane().repaint();
+    }
+}
+        
+// Method to register a new customer in the database
+// This method inserts the customer details (first name, last name, phone number, email, payment method, and password)
+// into the 'Customers' table of the TaxiService database.
     public void register_customer(){
         String url = "jdbc:mysql://localhost:3306/TaxiServicedb";
         //url used to connect to the database
         String username = "root";
-        String password = "mummycome12!";
+        String password = "mummycome12";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection(url,username,password);
@@ -47,11 +96,61 @@ public class CreateNewUser extends javax.swing.JFrame {
                 preparestatement.setString(6,tppassword.getText());
                 //each variable has its own preparestatment object
                 preparestatement.executeUpdate();
-        }} catch(Exception e) {
+        }} catch(ClassNotFoundException | SQLException e) {
             System.out.println(e);
         }
     }
+    
+// Method to register a new driver in the database
+// This method inserts the driver details (first name, last name, phone number, email, and password)
+// into the 'Drivers' table of the TaxiService database.
+    public void register_driver() {
+        // Database connection parameters
+        String url = "jdbc:mysql://localhost:3306/TaxiServicedb";
+        String username = "root";
+        String password = "mummycome12";
 
+        try {
+            // Load the MySQL JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            //Establish connection with the database
+            Connection connection = DriverManager.getConnection(url, username, password);
+
+            //SQL statement to insert a new driver into the Drivers table
+            String SQL = "INSERT INTO Drivers(driver_first_name, driver_last_name, driver_phone_number, driver_email_address, driver_password) VALUES(?, ?, ?, ?, ?)";
+
+            // Prepare the statement to insert the data
+            try (PreparedStatement preparestatement = connection.prepareStatement(SQL)) {
+                // Set the parameters using values from input fields
+                preparestatement.setString(1, tpfirst_name.getText());  // Set first name
+                preparestatement.setString(2, tplast_name.getText());   // Set last name
+                preparestatement.setString(3, tpphone_number.getText());  // Set phone number
+                preparestatement.setString(4, tpemail_address.getText());  // Set email address
+                preparestatement.setString(5, tppassword.getText());  // Set password
+
+                // Execute the SQL update (insert)
+                preparestatement.executeUpdate();
+
+                // Optionally, show confirmation message or clear the form
+                System.out.println("Driver registered successfully!");
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            // Print error if any occurs
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    
+     //Register button click handler for either customer or driver
+    public void registerUser() {
+        if ("Customer".equals(userType)) {
+            register_customer();
+        } else if ("Driver".equals(userType)) {
+            register_driver();
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -111,7 +210,7 @@ public class CreateNewUser extends javax.swing.JFrame {
         jLabel1.setText("First name:");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("First name:");
+        jLabel2.setText("Surname");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Phone number:");
@@ -173,7 +272,7 @@ public class CreateNewUser extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tpfirst_name, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tplast_name, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -195,7 +294,7 @@ public class CreateNewUser extends javax.swing.JFrame {
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(registerbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addContainerGap(67, Short.MAX_VALUE))
         );
 
         tpfirst_name.getAccessibleContext().setAccessibleName("first_name");
