@@ -8,14 +8,16 @@ package com.mycompany.taxiservice;
  *
  * @author jamwe
  */
+import com.mysql.cj.protocol.Resultset;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 public class CreateNewUser extends javax.swing.JFrame {
-
+    boolean emailcheck;
     /**
      * Creates new form CreateNewUser
      */
@@ -24,11 +26,67 @@ public class CreateNewUser extends javax.swing.JFrame {
         setTitle("Create New User");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        
         registerbutton.addActionListener(evt -> register_customer());
 
     }
+    public void check(){
+         String url = "jdbc:mysql://localhost:3306/TaxiServicedb";
+        //url used to connect to the database
+        String username = "root";
+        String password = "mummycome12!";
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection(url,username,password);
+            String SQL = ("SELECT * FROM Customers WHERE email_address=?;");    
+            ResultSet rs;
+            try(PreparedStatement preparedStatement=connection.prepareStatement(SQL)){
+                preparedStatement.setString(1,tpemail_address.getText());
+                rs=preparedStatement.executeQuery();
+                if("".equals(rs.getString("email_address"))){
+                emailcheck= false;
+            } else {
+                emailcheck=true;
+                }                
+            
+                    }}catch(Exception e){
+        System.out.println(e);
+    }
+    }
+    public boolean checkfields(){
+        if("".equals(tpfirst_name.getText())){
+            JOptionPane.showMessageDialog(this,"Please enter your first name", "Field left empty", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if("".equals(tplast_name.getText())){
+            JOptionPane.showMessageDialog(this,"Please enter your last name", "Field left empty", JOptionPane.ERROR_MESSAGE);  
+            return false;
+        }
+        if("".equals(tpemail_address.getText())){
+            JOptionPane.showMessageDialog(this,"Please enter your email address", "Field left empty", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } 
+        if("".equals(tpphone_number.getText())){
+            JOptionPane.showMessageDialog(this,"Please enter your phone number", "Field left empty", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if("".equals(tppayment_method.getText())){
+            JOptionPane.showMessageDialog(this,"Please enter your payment method", "Field left empty", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if("".equals(tppassword.getText())){
+            JOptionPane.showMessageDialog(this,"Please enter your password", "Field left empty", JOptionPane.ERROR_MESSAGE);
+            return false;
+        } 
+        return true;
+    }
     public void register_customer(){
+        check();
+        if(checkfields()==false){
+            return;
+        } else {
+        if(emailcheck==true){
+            JOptionPane.showMessageDialog(this, "Email already in use","Register Failed", JOptionPane.ERROR_MESSAGE);
+        } else {
         String url = "jdbc:mysql://localhost:3306/TaxiServicedb";
         //url used to connect to the database
         String username = "root";
@@ -38,6 +96,7 @@ public class CreateNewUser extends javax.swing.JFrame {
             Connection connection = DriverManager.getConnection(url,username,password);
             String SQL = ("INSERT INTO Customers(first_name,last_name,phone_number,email_address,payment_method,password) VALUES(?,?,?,?,?,?)");
             try (PreparedStatement preparestatement = connection.prepareStatement(SQL)) {
+                check();
                 System.out.println("Connection found my boy");
                 preparestatement.setString(1,tpfirst_name.getText());
                 preparestatement.setString(2,tplast_name.getText());
@@ -47,11 +106,14 @@ public class CreateNewUser extends javax.swing.JFrame {
                 preparestatement.setString(6,tppassword.getText());
                 //each variable has its own preparestatment object
                 preparestatement.executeUpdate();
-        }} catch(Exception e) {
+        }         
+        
+        } catch(Exception e) {
             System.out.println(e);
         }
     }
-
+    }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -34,10 +34,7 @@ public class Login extends javax.swing.JFrame {
         String password = "mummycome12!";
 
         try {
-            // Load JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // Establish connection
             Connection connection = DriverManager.getConnection(url, username, password);
 
             // SQL query to fetch the user based on email
