@@ -14,6 +14,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
+    String usertype;
+
+    public void choosetype(){
+            String[] options = {"Customer", "Driver"};
+        int choice = JOptionPane.showOptionDialog(this, "Please select your user type", "User Type",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+        if(choice == 0) { // Customer
+            usertype = "Customers";
+        } else if (choice == 1){
+            // Driver
+            usertype = "Drivers";
+        }
+    }
 
     /**
      * Creates new form Login
@@ -21,7 +35,11 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         // Attach action listener to login button
+        String email1 = tpemail_address.getText();
+        new Driver_Menu(email1);
+    
         jButton1.addActionListener(evt -> {
+            choosetype();
             try {
                 verifyCredentials();
             } catch (SQLException ex) {
@@ -46,12 +64,7 @@ public class Login extends javax.swing.JFrame {
         String dbPassword = "mummycome12!";
 
         // Determine user type based on email format (just an example, can be improved later)
-        String table = "Customers";  // Default to "Customers"
         
-        // Example logic to switch based on email domain or a field you want to use
-        if (email.endsWith("@driver.com")) {
-            table = "Drivers";  // Switch to "Drivers" if email ends with @driver.com
-        }
 
         // Try-catch block for handling SQL and connection errors
         try {
@@ -63,7 +76,7 @@ public class Login extends javax.swing.JFrame {
             // Establish connection to the database
             try (Connection connection = DriverManager.getConnection(url, username, dbPassword)) {
                 // SQL query to fetch password based on the provided email
-                String sql = "SELECT password FROM " + table + " WHERE email_address = ?";
+                String sql = "SELECT password FROM " + usertype + " WHERE email_address = ?";
 
 
                 // Prepare the statement to prevent SQL injection
@@ -80,7 +93,7 @@ public class Login extends javax.swing.JFrame {
                             if (storedPassword.equals(password)) {
                                 JOptionPane.showMessageDialog(this, "Login successful!");
                                 // Redirect based on user type
-                                if (table.equals("Drivers")) {
+                                if (usertype.equals("Drivers")) {
                                     // Redirect to driver dashboard
                                     System.out.println("Redirect to Driver Dashboard");
                                          Driver_Menu MenuPage = new Driver_Menu();

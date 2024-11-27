@@ -185,7 +185,7 @@ public class CreateNewUser extends javax.swing.JFrame {
             Connection connection = DriverManager.getConnection(url, username, password);
 
             //SQL statement to insert a new driver into the Drivers table
-            String SQL = "INSERT INTO Drivers(driver_first_name, driver_last_name, driver_phone_number, driver_email_address, driver_password) VALUES(?, ?, ?, ?, ?)";
+            String SQL = "INSERT INTO Drivers(first_name, last_name, phone_number, email_address, password) VALUES(?, ?, ?, ?, ?)";
 
             // Prepare the statement to insert the data
             try (PreparedStatement preparestatement = connection.prepareStatement(SQL)) {

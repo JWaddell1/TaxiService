@@ -3,25 +3,25 @@ package com.mycompany.taxiservice;
 public class Driver {
     //Attributes for the driver
     private int driver_id;
-    private String driver_first_name;
-    private String driver_last_name;
-    private String driver_phone_number;  
-    private String driver_email_address;
-    private String driver_password; 
+    private String first_name;
+    private String last_name;
+    private String phone_number;  
+    private String email_address;
+    private String password; 
     private boolean driver_status;
-    private String driver_rating;
+    private String rating;
 
     //constructor
-    public Driver(int driver_id, String driver_first_name, String driver_last_name, String driver_phone_number, 
-                  String driver_email_address, String driver_password, boolean driver_status, String driver_rating) {
+    public Driver(int driver_id, String first_name, String last_name, String phone_number, 
+                  String email_address, String password, boolean driver_status, String rating) {
         this.driver_id = driver_id;
-        this.driver_first_name = driver_first_name;
-        this.driver_last_name = driver_last_name;
-        this.driver_phone_number = driver_phone_number;
-        this.driver_email_address = driver_email_address;
-        this.driver_password = driver_password; 
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.phone_number = phone_number;
+        this.email_address = email_address;
+        this.password = password; 
         this.driver_status = driver_status;
-        this.driver_rating = driver_rating;
+        this.rating = rating;
     }
 
     // Getters and Setters
@@ -33,44 +33,44 @@ public class Driver {
         this.driver_id = driver_id;
     }
 
-    public String getDriver_first_name() {
-        return driver_first_name;
+    public String getfirst_name() {
+        return first_name;
     }
 
-    public void setDriver_first_name(String driver_first_name) {
-        this.driver_first_name = driver_first_name;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public String getDriver_last_name() {
-        return driver_last_name;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setDriver_last_name(String driver_last_name) {
-        this.driver_last_name = driver_last_name;
+    public void Last_name(String last_name) {
+        this.last_name = last_name;
     }
 
-    public String getDriver_phone_number() {
-        return driver_phone_number;
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public void setDriver_phone_number(String driver_phone_number) {
-        this.driver_phone_number = driver_phone_number;
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
-    public String getDriver_email_address() {
-        return driver_email_address;
+    public String getEmail_address() {
+        return email_address;
     }
 
-    public void setDriver_email_address(String driver_email_address) {
-        this.driver_email_address = driver_email_address;
+    public void setEmail_address(String email_address) {
+        this.email_address = email_address;
     }
 
-    public String getDriver_password() {
-        return driver_password;
+    public String getPassword() {
+        return password;
     }
 
-    public void setDriver_password(String driver_password) {
-        this.driver_password = driver_password;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isDriver_status() {
@@ -81,12 +81,12 @@ public class Driver {
         this.driver_status = driver_status;
     }
 
-    public String getDriver_rating() {
-        return driver_rating;
+    public String getRting() {
+        return rating;
     }
 
-    public void setDriver_rating(String driver_rating) {
-        this.driver_rating = driver_rating;
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     
@@ -94,11 +94,11 @@ public class Driver {
     //COULD BE REMOVED SINCE THERE IN THE TAXISERVICE ALEREADY
     // Methods
     public void acceptTrip() {
-        System.out.println("Trip accepted by driver: " + driver_first_name + " " + driver_last_name);
+        System.out.println("Trip accepted by driver: " + first_name + " " + last_name);
     }
 
     public void declineTrip() {
-        System.out.println("Trip declined by driver: " + driver_first_name + " " + driver_last_name);
+        System.out.println("Trip declined by driver: " + first_name + " " + last_name);
     }
 
     public void updateStatus(boolean status) {

@@ -117,7 +117,7 @@ public class HomePage extends javax.swing.JFrame {
         if (choice == 0) { // Customer
             CreateNewUser newUser = new CreateNewUser("Customer");
             newUser.setVisible(true);
-        } else if (choice != 1) {        } else {
+        } else if (choice != 1) {    } else {
             // Driver
             CreateNewUser newUser = new CreateNewUser("Driver");
             newUser.setVisible(true);
