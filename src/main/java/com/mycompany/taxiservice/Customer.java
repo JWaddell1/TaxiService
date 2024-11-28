@@ -12,17 +12,20 @@ public class Customer {
     private String phone_number = " ";
     private String email_address = " ";
     private String payment_method = " ";
+    private String password = " ";
 
     //Constructor to initialize customer with given values
     public Customer(int customer_id, String first_name, String last_name, 
-                    String phone_number, String email_address, String payment_method) {
+                    String phone_number, String email_address, String payment_method, String password) {
         this.customer_id = customer_id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.phone_number = phone_number;
         this.email_address = email_address;
         this.payment_method = payment_method;
+        this.password =  password;
     }
+      
 
     //Getter and Setter methods for the customer information class
 
@@ -79,6 +82,12 @@ public class Customer {
     public void setPayment_method(String payment_method) {
         this.payment_method = payment_method;
     }
+    public String getPassword(){
+        return password;
+    }
+    public void setPassword(String password){
+        this.password=password;
+    }
     
     //Probably would change
     //Public Method to Validate Customer 
@@ -86,4 +95,5 @@ public class Customer {
         //Probably will change
         return customer_id > 0;
     }
+    
 }

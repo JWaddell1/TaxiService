@@ -81,7 +81,7 @@ public class Driver {
         this.driver_status = driver_status;
     }
 
-    public String getRting() {
+    public String getRating() {
         return rating;
     }
 
